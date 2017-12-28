@@ -18,7 +18,7 @@ namespace SabberStonePowerLog
 		private static Regex idRgx = new Regex(@"(Entity|id)=([0-9]+|[A-Z0-9]+)", RegexOptions.IgnoreCase);
 		private static Regex blockStartRgx = new Regex(@"BLOCK_START BlockType=([A-Z]+) Entity=([0-9]+|[A-Z0-9]+|\[.*?\]) EffectCardId=([A-Z0-9_]*) EffectIndex=([-0-9]+) Target=([0-9]+|[A-Z0-9]+|\[.*?\])", RegexOptions.IgnoreCase);
 		private static Regex showEntityRgx1 = new Regex(@"([0-9]+) CardId=([A-Z0-9_]+)", RegexOptions.IgnoreCase);
-		private static Regex showEntityRgx2 = new Regex(@"([0-9]+|\[name=([A-Za-z ]+) id=([0-9]+) zone=([A-Z]+) zonePos=([0-9]+) cardId= player=([1-2])\] CardId=([A-Z0-9_]+))", RegexOptions.IgnoreCase);
+		private static Regex showEntityRgx2 = new Regex(@"([0-9]+|\[entityName=([A-Za-z ]+) id=([0-9]+) zone=([A-Z]+) zonePos=([0-9]+) cardId= player=([1-2])\] CardId=([A-Z0-9_]+))", RegexOptions.IgnoreCase);
 		private static Regex hideEntityRgx = new Regex(@"\[name=([A-Za-z ]+) id=([0-9]+) zone=([A-Z]+) zonePos=([0-9]+) cardId=([A-Za-z0-9_]+) player=([1-2])\] tag=([A-Z0-9_]+)[ ]value=([A-Z0-9]+)", RegexOptions.IgnoreCase);
 
 		private StreamReader file;
@@ -258,12 +258,12 @@ namespace SabberStonePowerLog
 			{
 				return new PowerShowEntity()
 				{
-					Name = match1.Groups[2].Value,
-					Id = Int32.Parse(match1.Groups[3].Value),
-					Zone = match1.Groups[4].Value,
-					ZonePos = match1.Groups[5].Value,
-					PlayerId = match1.Groups[6].Value,
-					CardId = match1.Groups[7].Value
+					Name = match2.Groups[2].Value,
+					Id = Int32.Parse(match2.Groups[3].Value),
+					Zone = match2.Groups[4].Value,
+					ZonePos = match2.Groups[5].Value,
+					PlayerId = match2.Groups[6].Value,
+					CardId = match2.Groups[7].Value
 				};
 			}
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using SabberStoneCore.Config;
 using SabberStoneCore.Enums;
 using SabberStoneCore.Model;
@@ -16,10 +17,27 @@ namespace SabberStoneCoreAi
 			Agent agent1 = new RandomAgent();
 			Agent agent2 = new RandomAgent();
 
-			FullGame(agent1, agent2);
+			PitAgents(agent1, agent2);
 
 			Console.WriteLine("Stopping...");
 			Console.ReadLine();
+		}
+
+		public static void PitAgents(Agent Player1, Agent Player2, int NoOfGames = 100)
+		{
+
+			for (int i = 0; i < NoOfGames; ++i)
+			{
+				FullGame(Player1, Player2);
+			}
+
+
+			int Player1Wins = Player1.WinHistory.Count(x => x == PlayState.WON);
+			int Player2Wins = Player2.WinHistory.Count(x => x == PlayState.WON);
+
+			Console.WriteLine($"Player1 - Player2");
+			Console.WriteLine($"{Player1Wins}   -   {Player2Wins}");
+
 		}
 
 		/// <summary>
@@ -68,17 +86,11 @@ namespace SabberStoneCoreAi
 				Console.WriteLine($"Hero[P1]: {game.Player1.Hero.Health} / Hero[P2]: {game.Player2.Hero.Health}");
 				Console.WriteLine("");
 
-				Console.WriteLine($"- Player 1 - <{game.CurrentPlayer.Name}> ---------------------------");
-
 				while (game.State == State.RUNNING && game.CurrentPlayer == game.Player1)
 				{
 					PlayerTask move = Player1.GetMove();
-
-					Console.WriteLine(move.FullPrint());
-
 					game.Process(move);
 				}
-				Console.WriteLine($"- Player 2 - <{game.CurrentPlayer.Name}> ---------------------------");
 				while (game.State == State.RUNNING && game.CurrentPlayer == game.Player2)
 				{
 					PlayerTask move = Player2.GetMove();
@@ -87,6 +99,9 @@ namespace SabberStoneCoreAi
 
 			}
 			Console.WriteLine($"Game: {game.State}, Player1: {game.Player1.PlayState} / Player2: {game.Player2.PlayState}");
+
+			Player1.EndGame();
+			Player2.EndGame();
 		}
 	}
 }

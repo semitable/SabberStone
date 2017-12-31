@@ -44,6 +44,11 @@ namespace SabberStoneCoreAi.Agents
 		/// </summary>
 		protected Controller _BoundController;
 
+		/// <summary>
+		/// History of play states at the time of EndGame()
+		/// </summary>
+		public List<PlayState> WinHistory = new List<PlayState>();
+
 		public Agent()
 		{
 			Console.WriteLine("Initializing Agent");
@@ -80,11 +85,22 @@ namespace SabberStoneCoreAi.Agents
 		{
 			Debug.Assert(_InGame);
 
+			WinHistory.Add(_BoundController.PlayState);
+
 			/* clean up stuff */
 			_InGame = false;
 			_BoundController = null;
 
 			Deck.Clear();
+		}
+
+		/// <summary>
+		/// Returns the play state (win/lose/concede etc!)
+		/// </summary>
+		/// <returns></returns>
+		public PlayState GetPlayState()
+		{
+			return _BoundController.PlayState;
 		}
 
 		/// <summary>

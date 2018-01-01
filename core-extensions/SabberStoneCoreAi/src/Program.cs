@@ -78,8 +78,11 @@ namespace SabberStoneCoreAi
 
 			game.MainReady();
 
+			int LastTurn;
+
 			while (game.State != State.COMPLETE)
 			{
+				LastTurn = game.Turn;
 				Console.WriteLine("");
 				Console.WriteLine($"Player1: {game.Player1.PlayState} / Player2: {game.Player2.PlayState} - " +
 								  $"ROUND {(game.Turn + 1) / 2} - {game.CurrentPlayer.Name}");
@@ -87,19 +90,19 @@ namespace SabberStoneCoreAi
 				Console.WriteLine("");
 				Console.WriteLine(game.FullPrint());
 
-				while (game.State == State.RUNNING && game.CurrentPlayer == game.Player1)
+				while(LastTurn == game.Turn && game.State == State.RUNNING)
 				{
-					PlayerTask move = Player1.GetMove();
-					game.Process(move);
-				}
+					LastTurn = game.Turn;
 
-				while (game.State == State.RUNNING && game.CurrentPlayer == game.Player2)
-				{
-					PlayerTask move = Player2.GetMove();
-					game.Process(move);
-				}
+					Agent CurrentAgent = game.CurrentPlayer == game.Player1 ? Player1 : Player2;
 
-				Console.ReadKey();
+					PlayerTask move = CurrentAgent.GetMove();
+					game.Process(move);
+
+					Console.WriteLine(move.FullPrint());
+
+				}
+				//Console.ReadKey();
 			}
 			Console.WriteLine($"Game: {game.State}, Player1: {game.Player1.PlayState} / Player2: {game.Player2.PlayState}");
 

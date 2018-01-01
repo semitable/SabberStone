@@ -75,6 +75,9 @@ namespace SabberStoneCoreAi.Agents
 				NodeData NewNode = new NodeData(task, GameCopy);
 				NewNode.Evaluation = EvaluateGame(GameCopy);
 
+				if (NewNode.Evaluation < ParentNode.data.Evaluation)
+					continue; //don't bother if we are making our situation worse
+
 				GameNode node = ParentNode.AddChild(NewNode);
 
 				//then expand it
@@ -122,6 +125,8 @@ namespace SabberStoneCoreAi.Agents
 			Game game = _BoundController.Game.Clone();
 
 			GameNode root = new GameNode(new NodeData(null, game));
+			root.data.Evaluation = EvaluateGame(root.data.State);
+
 			ExpandNode(root);
 
 			List<GameNode> LeafNodes = GetLeafNodes(root);

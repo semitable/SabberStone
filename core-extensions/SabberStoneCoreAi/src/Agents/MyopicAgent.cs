@@ -20,10 +20,13 @@ namespace SabberStoneCoreAi.Agents
 	{
 		public PlayerTask LastMove;
 		public Game State;
+		public int Evaluation;
+
 		public NodeData(PlayerTask m, Game g)
 		{
 			LastMove = m;
 			State = g;
+			Evaluation = Int32.MinValue;
 		}
 	}
 
@@ -40,6 +43,11 @@ namespace SabberStoneCoreAi.Agents
 			EvaluationRule = new RampScore();
 		}
 
+		private int EvaluateGame(Game game)
+		{
+			EvaluationRule.Controller = game.ControllerById(EntityID);
+			return EvaluationRule.Rate();
+		}
 
 		/// <summary>
 		/// Recursively expand and build a game tree in a DFS manner
@@ -64,7 +72,10 @@ namespace SabberStoneCoreAi.Agents
 				// first create this node
 				Game GameCopy = ParentNode.data.State.Clone();
 				GameCopy.Process(task);
-				GameNode node = ParentNode.AddChild(new NodeData(task, GameCopy));
+				NodeData NewNode = new NodeData(task, GameCopy);
+				NewNode.Evaluation = EvaluateGame(GameCopy);
+
+				GameNode node = ParentNode.AddChild(NewNode);
 
 				//then expand it
 				ExpandNode(node, depth+1);
@@ -115,16 +126,7 @@ namespace SabberStoneCoreAi.Agents
 
 			List<GameNode> LeafNodes = GetLeafNodes(root);
 
-			var ScoreClass = new MidRangeScore();
-
-			int ScoreNode(GameNode node)
-			{
-				ScoreClass.Controller = node.data.State.ControllerById(EntityID);
-				return ScoreClass.Rate();
-			}
-
-			GameNode BestMoveEnding = LeafNodes.OrderByDescending(o => ScoreNode(o)).First();
-
+			GameNode BestMoveEnding = LeafNodes.OrderByDescending(o => o.data.Evaluation).First();
 			GameNode BestMove = BestMoveEnding;
 
 			while (BestMove.parent.parent != null)

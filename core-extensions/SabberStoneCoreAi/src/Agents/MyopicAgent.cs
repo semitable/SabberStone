@@ -46,14 +46,20 @@ namespace SabberStoneCoreAi.Agents
 		/// Ends recursion on opponents turn
 		/// </summary>
 		/// <param name="ParentNode">the node currently to be expanded</param>
-		private void ExpandNode(GameNode ParentNode)
+		private void ExpandNode(GameNode ParentNode, int depth=0)
 		{
+			
+			//if game has ended do not try to expand
+			if (ParentNode.data.State.State != State.RUNNING)
+				return;
 
 			// do not expand the opponent's round
 			if (ParentNode.data.State.CurrentPlayer.PlayerId != _BoundController.PlayerId)
 				return;
 
-			foreach (PlayerTask task in ParentNode.data.State.ControllerById(EntityID).Options())
+			List<PlayerTask> options = ParentNode.data.State.ControllerById(EntityID).Options();
+
+			foreach (PlayerTask task in options)
 			{
 				// first create this node
 				Game GameCopy = ParentNode.data.State.Clone();
@@ -61,7 +67,7 @@ namespace SabberStoneCoreAi.Agents
 				GameNode node = ParentNode.AddChild(new NodeData(task, GameCopy));
 
 				//then expand it
-				ExpandNode(node);
+				ExpandNode(node, depth+1);
 			}
 
 		}

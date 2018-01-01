@@ -24,6 +24,11 @@ namespace SabberStoneCoreAi.Agents
 		public string Name { get; protected set; }
 
 		/// <summary>
+		/// The Entity ID (must be in a game)
+		/// </summary>
+		public int EntityID { get; protected set; }
+
+		/// <summary>
 		/// The Deck that should be used in the game. Only change it in CreateDeck()
 		/// </summary>
 		public List<Card> Deck { get; protected set; }
@@ -76,6 +81,9 @@ namespace SabberStoneCoreAi.Agents
 			/* initialize things when game starts*/
 			_InGame = true;
 			_BoundController = c;
+
+			EntityID = _BoundController.Id;
+
 		}
 
 		/// <summary>
@@ -90,7 +98,7 @@ namespace SabberStoneCoreAi.Agents
 			/* clean up stuff */
 			_InGame = false;
 			_BoundController = null;
-
+			EntityID = -1;
 			Deck.Clear();
 		}
 

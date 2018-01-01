@@ -14,7 +14,7 @@ namespace SabberStoneCoreAi
 
 		private static void Main(string[] args)
 		{
-			Agent agent1 = new RandomAgent();
+			Agent agent1 = new MyopicAgent();
 			Agent agent2 = new RandomAgent();
 
 			PitAgents(agent1, agent2);
@@ -85,18 +85,21 @@ namespace SabberStoneCoreAi
 								  $"ROUND {(game.Turn + 1) / 2} - {game.CurrentPlayer.Name}");
 				Console.WriteLine($"Hero[P1]: {game.Player1.Hero.Health} / Hero[P2]: {game.Player2.Hero.Health}");
 				Console.WriteLine("");
+				Console.WriteLine(game.FullPrint());
 
 				while (game.State == State.RUNNING && game.CurrentPlayer == game.Player1)
 				{
 					PlayerTask move = Player1.GetMove();
 					game.Process(move);
 				}
+
 				while (game.State == State.RUNNING && game.CurrentPlayer == game.Player2)
 				{
 					PlayerTask move = Player2.GetMove();
 					game.Process(move);
 				}
 
+				Console.ReadKey();
 			}
 			Console.WriteLine($"Game: {game.State}, Player1: {game.Player1.PlayState} / Player2: {game.Player2.PlayState}");
 

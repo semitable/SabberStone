@@ -4,6 +4,9 @@
     <TargetFramework>netcoreapp1.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="src\Agents\ScoreAgent.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\SabberStoneCore\SabberStoneCore.csproj" />
   </ItemGroup>
 </Project>

@@ -17,7 +17,7 @@ namespace SabberStoneCoreAi
 			Agent agent1 = new MyopicAgent();
 			Agent agent2 = new ScoreAgent();
 
-			PitAgents(agent1, agent2, 10);
+			PitAgents(agent1, agent2, 100);
 
 			Console.WriteLine("Stopping...");
 			Console.ReadLine();
@@ -26,9 +26,11 @@ namespace SabberStoneCoreAi
 		public static void PitAgents(Agent Player1, Agent Player2, int NoOfGames = 100)
 		{
 
-			for (int i = 0; i < NoOfGames; ++i)
+			for (int i = 0; i < NoOfGames/2; ++i)
 			{
 				FullGame(Player1, Player2);
+				FullGame(Player2, Player1);
+
 			}
 
 

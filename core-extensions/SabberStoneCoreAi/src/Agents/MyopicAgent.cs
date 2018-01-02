@@ -36,6 +36,8 @@ namespace SabberStoneCoreAi.Agents
 
 		IScore EvaluationRule;
 
+		HashSet<string> EvaluatedPositions;
+
 		public MyopicAgent() : base()
 		{
 			Name = @"Myopic Agent";
@@ -65,13 +67,24 @@ namespace SabberStoneCoreAi.Agents
 			if (ParentNode.data.State.CurrentPlayer.PlayerId != _BoundController.PlayerId)
 				return;
 
+			if (depth > 4)
+				return;
+
 			List<PlayerTask> options = ParentNode.data.State.ControllerById(EntityID).Options();
 
 			foreach (PlayerTask task in options)
 			{
 				// first create this node
 				Game GameCopy = ParentNode.data.State.Clone();
+				
 				GameCopy.Process(task);
+
+				string GameHash = GameCopy.Hash();
+				if (EvaluatedPositions.Contains(GameHash))
+					continue;
+
+				EvaluatedPositions.Add(GameHash);
+				
 				NodeData NewNode = new NodeData(task, GameCopy);
 				NewNode.Evaluation = EvaluateGame(GameCopy);
 
@@ -127,7 +140,9 @@ namespace SabberStoneCoreAi.Agents
 			GameNode root = new GameNode(new NodeData(null, game));
 			root.data.Evaluation = EvaluateGame(root.data.State);
 
+			EvaluatedPositions = new HashSet<string>();
 			ExpandNode(root);
+			EvaluatedPositions.Clear();
 
 			List<GameNode> LeafNodes = GetLeafNodes(root);
 

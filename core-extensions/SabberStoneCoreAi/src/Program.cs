@@ -15,9 +15,9 @@ namespace SabberStoneCoreAi
 		private static void Main(string[] args)
 		{
 			Agent agent1 = new MyopicAgent();
-			Agent agent2 = new RandomAgent();
+			Agent agent2 = new ScoreAgent();
 
-			PitAgents(agent1, agent2);
+			PitAgents(agent1, agent2, 10);
 
 			Console.WriteLine("Stopping...");
 			Console.ReadLine();

@@ -117,7 +117,7 @@ namespace SabberStoneCoreAi.Nodes
 					.Take(maxWidth)
 					.ToDictionary(p => p.Key, p => p.Value);
 
-				Console.WriteLine($"Depth: {i + 1} --> {depthNodes.Count}/{nextDepthNodes.Count} options! [SOLUTIONS:{endTurnNodes.Count}]");
+				//Console.WriteLine($"Depth: {i + 1} --> {depthNodes.Count}/{nextDepthNodes.Count} options! [SOLUTIONS:{endTurnNodes.Count}]");
 			}
 			return endTurnNodes;
 		}

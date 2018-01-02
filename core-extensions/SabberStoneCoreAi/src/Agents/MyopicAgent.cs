@@ -38,6 +38,8 @@ namespace SabberStoneCoreAi.Agents
 
 		HashSet<string> EvaluatedPositions;
 
+		private const int MaxDepth = 3;
+
 		public MyopicAgent() : base()
 		{
 			Name = @"Myopic Agent";
@@ -67,7 +69,7 @@ namespace SabberStoneCoreAi.Agents
 			if (ParentNode.data.State.CurrentPlayer.PlayerId != _BoundController.PlayerId)
 				return;
 
-			if (depth > 4)
+			if (depth > MaxDepth)
 				return;
 
 			List<PlayerTask> options = ParentNode.data.State.ControllerById(EntityID).Options();
